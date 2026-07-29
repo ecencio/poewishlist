@@ -1,11 +1,12 @@
 import { neon } from '@neondatabase/serverless'
+import { env } from '~~/env'
 
 let _db: ReturnType<typeof neon> | null = null
 
 export function useDb() {
   if (_db) return _db
 
-  const connectionString = process.env.DATABASE_URL
+  const connectionString = env.DATABASE_URL
   if (!connectionString) {
     throw new Error('DATABASE_URL environment variable is not set')
   }
