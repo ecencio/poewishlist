@@ -2,7 +2,6 @@ import { neon } from '@neondatabase/serverless'
 import { env } from '~~/env'
 
 let _db: ReturnType<typeof neon> | null = null
-
 export function useDb() {
   if (_db) return _db
 
@@ -24,7 +23,7 @@ export async function initSchema() {
       id SERIAL PRIMARY KEY,
       username TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL,
-      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+      created_at TIMESTAMP NOT NULL DEFAULT NOW()
     );
   `
 
@@ -42,7 +41,7 @@ export async function initSchema() {
       found_by_id INTEGER,
       found_by_username TEXT,
       found_at TEXT,
-      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      created_at TIMESTAMP NOT NULL DEFAULT NOW(),
       FOREIGN KEY (added_by_id) REFERENCES users(id)
     );
   `

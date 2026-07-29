@@ -7,10 +7,12 @@ export default defineEventHandler(async (event) => {
   }
 
   const db = useDb()
-  const item = db.prepare('SELECT * FROM wish_items WHERE id = ?').get(id) as {
+  
+  // Fetch item using Neon tagged template literal
+  const [item] = await db`SELECT * FROM wish_items WHERE id = ${id}` as Array<{
     id: number
     added_by_id: number
-  } | undefined
+  }>
 
   if (!item) {
     throw createError({ statusCode: 404, message: 'Item no encontrado' })
@@ -20,6 +22,8 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 403, message: 'Solo quien agregó el item puede eliminarlo' })
   }
 
-  db.prepare('DELETE FROM wish_items WHERE id = ?').run(id)
+  // Delete item using Neon tagged template literal
+  await db`DELETE FROM wish_items WHERE id = ${id}`
+  
   return { success: true }
 })

@@ -7,29 +7,23 @@ export default defineEventHandler(async (event) => {
   }
 
   const db = useDb()
-  const item = db.prepare('SELECT * FROM wish_items WHERE id = ?').get(id) as {
+  
+  // Fetch the item
+  const [item] = await db`SELECT * FROM wish_items WHERE id = ${id}` as Array<{
     id: number
-    found_by_id: number | null
-  } | undefined
+    added_by_id: number
+  }>
 
   if (!item) {
     throw createError({ statusCode: 404, message: 'Item no encontrado' })
   }
 
-  if (item.found_by_id) {
-    // Desmarcar como encontrado
-    db.prepare('UPDATE wish_items SET found_by_id = NULL, found_by_username = NULL, found_at = NULL WHERE id = ?').run(id)
-  }
-  else {
-    // Marcar como encontrado
-    db.prepare(`
-      UPDATE wish_items
-      SET found_by_id = ?, found_by_username = ?, found_at = datetime('now')
-      WHERE id = ?
-    `).run(session.user.id, session.user.username, id)
-
-    // TODO Implementar lógica para enviar notificaciones a Telegram cuando se marque un item como encontrado
+  if (item.added_by_id !== session.user.id) {
+    throw createError({ statusCode: 403, message: 'Solo quien agregó el item puede eliminarlo' })
   }
 
-  return db.prepare('SELECT * FROM wish_items WHERE id = ?').get(id)
+  // Delete the item
+  await db`DELETE FROM wish_items WHERE id = ${id}`
+  
+  return { success: true }
 })

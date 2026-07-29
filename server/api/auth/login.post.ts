@@ -6,11 +6,15 @@ export default defineEventHandler(async (event) => {
   }
 
   const db = useDb()
-  const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username.trim()) as {
+  
+  // Use array destructuring to grab the first user result from Neon's returned array
+  const [user] = await db`
+    SELECT * FROM users WHERE username = ${username.trim()}
+  ` as Array<{
     id: number
     username: string
     password: string
-  } | undefined
+  }>
 
   if (!user || !(await verifyPassword(user.password, password))) {
     throw createError({ statusCode: 401, message: 'Usuario o contraseña incorrectos' })

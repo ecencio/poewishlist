@@ -1,30 +1,31 @@
 export default defineEventHandler(async (event) => {
-  const { username, password } = await readBody(event)
+  const body = await readBody(event)
+  const { username, password } = body
 
-  if (!username?.trim() || !password) {
-    throw createError({ statusCode: 400, message: 'Usuario y contraseña requeridos' })
+  if (!username || !password) {
+    throw createError({ statusCode: 400, message: 'Faltan campos obligatorios' })
   }
-  if (username.trim().length < 3 || username.trim().length > 30) {
-    throw createError({ statusCode: 400, message: 'El usuario debe tener entre 3 y 30 caracteres' })
-  }
+
   if (password.length < 6) {
     throw createError({ statusCode: 400, message: 'La contraseña debe tener al menos 6 caracteres' })
   }
 
   const db = useDb()
-  const existing = db.prepare('SELECT id FROM users WHERE username = ?').get(username.trim())
-  if (existing) {
+  
+  // 1. Check if user exists using Neon tagged template literal
+  const existingUsers = await db`SELECT id FROM users WHERE username = ${username.trim()}`
+  
+  if (existingUsers.length > 0) {
     throw createError({ statusCode: 409, message: 'El nombre de usuario ya está en uso' })
   }
 
   const hashed = await hashPassword(password)
-  const { lastInsertRowid } = db
-    .prepare('INSERT INTO users (username, password) VALUES (?, ?)')
-    .run(username.trim(), hashed)
 
-  await setUserSession(event, {
-    user: { id: Number(lastInsertRowid), username: username.trim() }
-  })
+  // 2. Insert the new user
+  await db`
+    INSERT INTO users (username, password) 
+    VALUES (${username.trim()}, ${hashed})
+  `
 
   return { success: true }
 })
