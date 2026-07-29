@@ -1,64 +1,65 @@
-# Nuxt Starter Template
+# PoE League Tracker
 
-[![Nuxt UI](https://img.shields.io/badge/Made%20with-Nuxt%20UI-00DC82?logo=nuxt&labelColor=020420)](https://ui.nuxt.com)
+Aplicación privada para nuestra liga de **Path of Exile**, pensada para un grupo reducido de jugadores. Permite registrar los objetos que cada uno necesita, ver qué está buscando el resto del grupo y marcar los items como encontrados una vez conseguidos.
 
-Use this template to get started with [Nuxt UI](https://ui.nuxt.com) quickly.
+Construida con [Nuxt](https://nuxt.com) y [Nuxt UI](https://ui.nuxt.com).
 
-- [Live demo](https://starter-template.nuxt.dev/)
-- [Documentation](https://ui.nuxt.com/docs/getting-started/installation/nuxt)
+## Funcionalidades
 
-<a href="https://starter-template.nuxt.dev/" target="_blank">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png">
-    <img alt="Nuxt Starter Template" src="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png" width="830" height="466">
-  </picture>
-</a>
+- ➕ **Agregar objetos**: cada jugador puede registrar los items que necesita para su build o progresión.
+- 👀 **Ver necesidades del grupo**: lista compartida de todo lo que el equipo está buscando, para saber qué guardar cuando dropea.
+- ✅ **Marcar como encontrado**: al conseguir un objeto se marca como encontrado/entregado y desaparece de la lista de pendientes.
+- 🔒 Uso privado, pensado solo para los miembros de la liga.
 
-> The starter template for Vue is on https://github.com/nuxt-ui-templates/starter-vue.
+## Stack
 
-## Quick Start
-
-```bash [Terminal]
-npm create nuxt@latest -- -t ui
-```
-
-## Deploy your own
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-name=starter&repository-url=https%3A%2F%2Fgithub.com%2Fnuxt-ui-templates%2Fstarter&demo-image=https%3A%2F%2Fui.nuxt.com%2Fassets%2Ftemplates%2Fnuxt%2Fstarter-dark.png&demo-url=https%3A%2F%2Fstarter-template.nuxt.dev%2F&demo-title=Nuxt%20Starter%20Template&demo-description=A%20minimal%20template%20to%20get%20started%20with%20Nuxt%20UI.)
+- **Frontend**: Nuxt + Nuxt UI
+- **Backend**: API propia + base de datos // Items desde docs.poe.watch o poewiki.net
 
 ## Setup
 
-Make sure to install the dependencies:
+Instalar las dependencias:
 
 ```bash
 pnpm install
 ```
 
-## Development Server
+Crear un archivo `.env` en la raíz del proyecto con las variables necesarias (ver `.env.example`):
 
-Start the development server on `http://localhost:3000`:
+```bash
+# Ejemplo
+NUXT_SESSION_PASSWORD=
+```
+
+## Servidor de desarrollo
+
+Levantar el servidor de desarrollo en `https://poe.localhost/`: <br>
+Requiere [Portless](https://github.com/vercel-labs/portless)
 
 ```bash
 pnpm dev
 ```
 
-## Production
+## Producción
 
-Build the application for production:
+Compilar la aplicación para producción:
 
 ```bash
 pnpm build
 ```
 
-Locally preview production build:
+Previsualizar el build de producción localmente:
 
 ```bash
 pnpm preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Más info en la [documentación de deployment de Nuxt](https://nuxt.com/docs/getting-started/deployment).
 
-## Renovate integration
+## Roadmap / ideas futuras
 
-Install [Renovate GitHub app](https://github.com/apps/renovate/installations/select_target) on your repository and you are good to go.
+- [ ] Crear grupos para separar diferentes ligas
+  - [ ] Listar ligas disponibles para guardar (usado en api)
+  - [ ] Generar código/link de invitation
+- [ ] Notificaciones cuando alguien agrega un item que otro está buscando
+- [ ] Historial de items encontrados por jugador
