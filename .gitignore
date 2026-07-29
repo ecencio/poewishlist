@@ -23,4 +23,6 @@ logs
 .env.*
 !.env.example
 
-*.db
+poe.db
+poe.db-shm
+poe.db-wal
