@@ -1,45 +1,48 @@
-import { DatabaseSync } from 'node:sqlite'
-import { join } from 'node:path'
+import { neon } from '@neondatabase/serverless'
 
-let _db: DatabaseSync | null = null
+let _db: ReturnType<typeof neon> | null = null
 
 export function useDb() {
   if (_db) return _db
 
-  _db = new DatabaseSync(join(process.cwd(), 'poe.db'))
-  
-  // Native node:sqlite enables WAL mode via pragma execution
-  _db.exec('PRAGMA journal_mode = WAL;')
-  _db.exec('PRAGMA foreign_keys = ON;')
-  
-  initSchema(_db)
+  const connectionString = process.env.DATABASE_URL
+  if (!connectionString) {
+    throw new Error('DATABASE_URL environment variable is not set')
+  }
+
+  _db = neon(connectionString)
   return _db
 }
 
-function initSchema(db: DatabaseSync) {
-  db.exec(`
+// Helper to initialize tables if they don't exist
+export async function initSchema() {
+  const sql = useDb()
+  
+  await sql`
     CREATE TABLE IF NOT EXISTS users (
-      id    INTEGER PRIMARY KEY AUTOINCREMENT,
-      username TEXT UNIQUE NOT NULL COLLATE NOCASE,
+      id SERIAL PRIMARY KEY,
+      username TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL,
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
+  `
 
+  await sql`
     CREATE TABLE IF NOT EXISTS wish_items (
-      id                 INTEGER PRIMARY KEY AUTOINCREMENT,
-      poe_item_id        TEXT NOT NULL UNIQUE COLLATE NOCASE,
-      name               TEXT NOT NULL,
-      icon               TEXT,
-      category           TEXT,
-      base_type          TEXT,
-      observation        TEXT,
-      added_by_id        INTEGER NOT NULL,
+      id SERIAL PRIMARY KEY,
+      poe_item_id TEXT NOT NULL UNIQUE,
+      name TEXT NOT NULL,
+      icon TEXT,
+      category TEXT,
+      base_type TEXT,
+      observation TEXT,
+      added_by_id INTEGER NOT NULL,
       added_by_username TEXT NOT NULL,
-      found_by_id        INTEGER,
+      found_by_id INTEGER,
       found_by_username TEXT,
-      found_at           TEXT,
-      created_at         TEXT NOT NULL DEFAULT (datetime('now')),
+      found_at TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
       FOREIGN KEY (added_by_id) REFERENCES users(id)
     );
-  `)
+  `
 }
