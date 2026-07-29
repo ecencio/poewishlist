@@ -27,6 +27,8 @@ export default defineEventHandler(async (event) => {
       SET found_by_id = ?, found_by_username = ?, found_at = datetime('now')
       WHERE id = ?
     `).run(session.user.id, session.user.username, id)
+
+    // TODO Implementar lógica para enviar notificaciones a Telegram cuando se marque un item como encontrado
   }
 
   return db.prepare('SELECT * FROM wish_items WHERE id = ?').get(id)

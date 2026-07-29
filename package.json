@@ -14,10 +14,12 @@
     "@iconify-json/lucide": "^1.2.120",
     "@iconify-json/simple-icons": "^1.2.92",
     "@nuxt/ui": "^4.10.0",
+    "@t3-oss/env-nuxt": "^0.13.11",
     "better-sqlite3": "^13.0.1",
     "nuxt": "^4.4.8",
     "nuxt-auth-utils": "^0.5.29",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.16.0",
