@@ -19,7 +19,7 @@ interface CompactItem {
 let _items: PoeSearchResult[] = []
 let _lastFetch = 0
 const CACHE_TTL = 2 * 60 * 60 * 1000 // 2 hours
-const LEAGUE = 'Standard'
+const LEAGUE = 'Allflame'
 
 export async function searchPoeItems(query: string): Promise<PoeSearchResult[]> {
   const q = query.trim().toLowerCase()
