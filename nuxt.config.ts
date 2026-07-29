@@ -16,10 +16,6 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2026-06-30',
 
-  experimental: {
-    sqliteConnector: 'native'
-  },
-
   eslint: {
     config: {
       stylistic: {
