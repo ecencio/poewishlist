@@ -37,7 +37,7 @@ const foundLabel = computed(() =>
 )
 
 function formatDate(dateStr: string) {
-  return new Date(dateStr + 'Z').toLocaleDateString('es-AR', {
+  return new Date(dateStr).toLocaleDateString('es-UY', {
     day: '2-digit', month: '2-digit', year: 'numeric'
   })
 }
@@ -50,16 +50,30 @@ function formatDate(dateStr: string) {
   >
     <!-- Item header: icon + name + delete -->
     <div class="flex gap-3 items-start">
-      <div class="w-14 h-14 shrink-0 flex items-center justify-center rounded bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
-        <img
-          v-if="item.icon && !iconError"
-          :src="item.icon"
-          :alt="item.name"
-          class="w-12 h-12 object-contain"
-          loading="lazy"
-          @error="iconError = true"
-        >
-        <UIcon v-else name="i-lucide-gem" class="w-8 h-8 text-muted" />
+      <div class="w-14 h-14 shrink-0 flex items-center justify-center rounded bg-neutral-100 dark:bg-neutral-500 overflow-hidden">
+        <UPopover mode="hover" enable-touch>
+          <img
+            v-if="item.icon && !iconError"
+            :src="item.icon"
+            :alt="item.name"
+            class="w-12 h-12 object-contain"
+            loading="lazy"
+            @error="iconError = true"
+          >
+          <UIcon v-else name="i-lucide-gem" class="w-8 h-8 text-muted" />
+          <template #content>
+            <div class="bg-neutral-100 dark:bg-neutral-500 rounded">
+              <img
+                v-if="item.icon && !iconError"
+                :src="item.icon"
+                :alt="item.name"
+                class="object-contain p-2"
+                loading="lazy"
+                @error="iconError = true"
+              >
+            </div>
+          </template>
+        </UPopover>
       </div>
 
       <div class="flex-1 min-w-0">

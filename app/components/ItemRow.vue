@@ -46,15 +46,29 @@ function formatDate(dateStr: string) {
   >
     <!-- Icon -->
     <div class="w-10 h-10 shrink-0 flex items-center justify-center rounded-lg bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
-      <img
-        v-if="item.icon && !iconError"
-        :src="item.icon"
-        :alt="item.name"
-        class="w-9 h-9 object-contain"
-        loading="lazy"
-        @error="iconError = true"
-      >
-      <UIcon v-else name="i-lucide-gem" class="w-5 h-5 text-muted" />
+      <UPopover mode="hover" enable-touch>
+        <img
+          v-if="item.icon && !iconError"
+          :src="item.icon"
+          :alt="item.name"
+          class="w-9 h-9 object-contain"
+          loading="lazy"
+          @error="iconError = true"
+        >
+        <UIcon v-else name="i-lucide-gem" class="w-5 h-5 text-muted" />
+        <template #content>
+          <div class="bg-neutral-100 dark:bg-neutral-500 rounded">
+            <img
+              v-if="item.icon && !iconError"
+              :src="item.icon"
+              :alt="item.name"
+              class="object-contain p-2"
+              loading="lazy"
+              @error="iconError = true"
+            >
+          </div>
+        </template>
+      </UPopover>
     </div>
 
     <!-- Name + meta -->

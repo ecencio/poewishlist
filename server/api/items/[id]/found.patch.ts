@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const db = useDb()
-  
+
   // Fetch the item
   const [item] = await db`SELECT * FROM wish_items WHERE id = ${id}` as Array<{
     id: number
@@ -24,6 +24,6 @@ export default defineEventHandler(async (event) => {
 
   // Delete the item
   await db`DELETE FROM wish_items WHERE id = ${id}`
-  
+
   return { success: true }
 })
