@@ -36,7 +36,9 @@ import { env } from '~~/env'
 const TOKEN = env.TELEGRAM_TOKEN
 const CHAT_ID = env.TELEGRAM_CHAT_ID
 
-export async function sendTelegramNotification(message: string) {
+type ParseMode = 'MarkdownV2' | 'HTML' | 'Markdown' | 'None'
+
+export async function sendTelegramNotification(message: string, parse_mode: ParseMode = 'None') {
   await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
     method: 'POST',
     headers: {
@@ -44,7 +46,8 @@ export async function sendTelegramNotification(message: string) {
     },
     body: JSON.stringify({
       chat_id: CHAT_ID,
-      text: message
+      text: message,
+      parse_mode
     })
   })
 }

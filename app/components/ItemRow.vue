@@ -110,7 +110,7 @@ function formatDate(dateStr: string) {
         :color="item.found_by_id ? 'neutral' : 'primary'"
         :variant="item.found_by_id ? 'outline' : 'solid'"
         size="xs"
-        :icon="item.found_by_id ? 'i-lucide-x' : 'i-lucide-check'"
+        :icon="item.found_by_id ? 'i-lucide-search-x' : 'i-lucide-search-check'"
         @click="emit('toggle-found')"
       />
 

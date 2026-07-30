@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const db = useDb()
-  
+
   // Fetch item using Neon tagged template literal
   const [item] = await db`SELECT * FROM wish_items WHERE id = ${id}` as Array<{
     id: number
@@ -24,6 +24,6 @@ export default defineEventHandler(async (event) => {
 
   // Delete item using Neon tagged template literal
   await db`DELETE FROM wish_items WHERE id = ${id}`
-  
+
   return { success: true }
 })
